@@ -1,0 +1,82 @@
+import pygame
+pygame.init()
+import keyboard
+import sys
+import os
+from random import seed
+from random import randint
+import time
+BALL_IMG=pygame.image.load(os.path.join('ball.png'))
+BALL_FIN=pygame.transform.rotate(pygame.transform.scale(BALL_IMG,(40,40)),90)
+seed(1)
+WIDTH,HEIGHT =1920, 1080
+WIN= pygame.display.set_mode((WIDTH,HEIGHT))
+pygame.display.set_caption('Aim train')
+white=(255,255,255)
+black=(0,0,0)
+FPS=165
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+def draw_window(text,ball,ball1,score):
+    WIN.fill(black)
+    WIN.blit(BALL_FIN,(ball.x, ball.y))
+    WIN.blit(BALL_FIN,(ball1.x, ball1.y))
+    
+    WIN.blit(font.render(str(text), True, black, white),(1850,0))
+    WIN.blit(font.render('score '+score, True, black, white),(1700,0))
+    pygame.display.update()
+
+
+def main():
+    score=0
+
+    
+
+    ball=pygame.Rect(500,500,40,40)
+    ball1=pygame.Rect(300,300,40,40)
+    clock=pygame.time.Clock()
+
+
+
+
+    run=True
+    while run: 
+        FPS_COUNT=(int(clock.get_fps()))
+        aimx,aimy=(pygame.mouse.get_pos())
+        
+        
+        clock.tick(FPS)
+
+       
+        
+
+        
+        if keyboard.is_pressed('esc') == True:
+            run=False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run=False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                if ball.collidepoint(aimx,aimy):
+                    
+                    ball.x=(randint(800,1400))
+                    ball.y=(randint(400,800))
+                    score+=1
+                    
+                if ball1.collidepoint(aimx,aimy):
+                    ball1.x=(randint(800,1400))
+                    ball1.y=(randint(400,800))
+                    score+=1
+
+        
+        draw_window(FPS_COUNT,ball,ball1,str(score))
+    WIN.blit(font.render('Game over'  '  score '+(str(score)), True, black, white),(900,500))
+    pygame.display.update()
+
+    time.sleep(3)
+
+    pygame.quit
+
+if __name__=='__main__':
+    main()
